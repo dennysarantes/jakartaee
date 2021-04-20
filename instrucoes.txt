@@ -1,0 +1,10 @@
+1- Usar o Wildfly 21.0.1 final para deployar a aplicação
+2- Ao criar o projeto, deve-se escolher o JDK 14
+3- Ao criar o projeto, deve-se escoher o standalone-full.xml do wildfly
+4- Para ter controle do processamento, configurar o pool de session-beans em wildfly20.0.1/standalone/configuration/standalone-full.xml
+		a) Procurar(crtl + F)  por "session-beans"
+		b) Dentro da tag <stateless> haverá o pool-name, que nessa versão do wildfly se chama slsb-strict-max-poll
+		c) crtl+f em "slsb-strict-max-poll" 
+		d) Dentro das tags pools/bean-instance-pools/strict-max-poll 
+		e) onde está derive-size="from-worker-pools" usar max-pool-size="20" 
+			(isso faz com que 20 instâncias dos ejbs anotados já estejam disponíveis ao subir o servidor de aplicação) 
