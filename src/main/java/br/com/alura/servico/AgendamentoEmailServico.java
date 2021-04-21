@@ -3,13 +3,25 @@ package br.com.alura.servico;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+
+import br.com.alura.dao.AgendamentoEmailDAO;
+import br.com.alura.entidade.AgendamentoEmail;
 
 @Stateless
 public class AgendamentoEmailServico {
 	
+	@Inject
+	private AgendamentoEmailDAO dao;
 	
-	public List<String> listar(){
-		return List.of("joao@alura.com.br");
+	public List<AgendamentoEmail> listar(){
+		//AgendamentoEmailDAO dao = new AgendamentoEmailDAO(); -> O Jboss injeta a classe DAO
+		return dao.listar();
+	}
+	
+	public void inserir(AgendamentoEmail agendamentoEmail) {
+		agendamentoEmail.setAgendado(false);
+		dao.inserir(agendamentoEmail);
 	}
 	
 }

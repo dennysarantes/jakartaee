@@ -1,3 +1,19 @@
+*** Para este projeto deve-se criar um banco mysql:
+CREATE DATABASE agendamentoemaildb;
+
+USE agendamentoemaildb;
+
+CREATE TABLE agendamentoemail (
+    id int NOT NULL AUTO_INCREMENT,
+    email varchar(50) NOT NULL,
+    assunto varchar(50) NOT NULL,
+    mensagem varchar(255) NOT NULL,
+    agendado tinytext NOT NULL,
+    PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+
 1- Usar o Wildfly 21.0.1 final para deployar a aplicação
 2- Ao criar o projeto, deve-se escolher o JDK 14
 3- Ao criar o projeto, deve-se escoher o standalone-full.xml do wildfly
@@ -7,4 +23,44 @@
 		c) crtl+f em "slsb-strict-max-poll" 
 		d) Dentro das tags pools/bean-instance-pools/strict-max-poll 
 		e) onde está derive-size="from-worker-pools" usar max-pool-size="20" 
-			(isso faz com que 20 instâncias dos ejbs anotados já estejam disponíveis ao subir o servidor de aplicação) 
+			(isso faz com que 20 instâncias dos ejbs anotados já estejam disponíveis ao subir o servidor de aplicação)
+5- Realizar o download do conector MySql (banco escolhido para o projeto)
+6- Criar módulo MySQL no servidor Wildfly
+		a) pelo terminar acessar /bin
+		b) Executar o jboss-cli.sh
+		c) digitar o comando "connect" (para isso funcionar o servidor deverá estar no ar)
+		d) Digitar o comando:
+			module add --name=com.mysql --resources="{Local em que o .jar está salvo}" --dependencies=javax.api,javax.transaction.api
+			Meu caso: module add --name=com.mysql --resources="/home/dennys/Documentos/exports/mysql-connector-java-8.0.20.jar" --dependencies=javax.api,javax.transaction.api
+		e) Verificar se na pasta wildfly/modules/com/mysql/main foi criado o module.xml e o mysql-connector
+		f) Voltar ao terminar e instalar o jar do conector 
+			a) Digitar o seguinte comando. É importante verificar que o driver-module-name deve ser igual ao criado no comando anterior.
+			/subsystem=datasources/jdbc-driver=mysql:add(driver-name=mysql,driver-module-name=com.mysql,driver-xa-datasource-class-name=com.mysql.cj.jdbc.MysqlXADataSource)
+		g) O terminal deve retornar uma mensagem de sucesso:
+			{"outcome" => success}
+		h) Entrar na console de administração do wildfly
+		i) Acessar a opção new datasource (antes, verifique que o na aba jdbc foi criado o mysql)
+		j) Escolher o nome do datasource, no caso desse projeto foi escolhido AgendamentoEmailDS
+		k) escolher o JNDI (IMPORTANTE, esse é o nome que deverá ser referenciado na aplicação)
+			No caso do projeto foi escolhido: java:/AgendamentoEmailDS
+		l) Connection url, nesse caso do projeto: jdbc:mysql://localhost:3306/agendamentoemaildb
+			agendamentoemaildb -> É o nome do banco criado no Mysql local.
+		m) Testar conexão
+		n) Criar a pasta/package de nome src/main/webapp no projeto
+		o) Dentro da webapp criar a pasta (folder) WEB-INF (nesta pasta serão inseridos recursos não acessíveis via browser)
+		p) Dentro da WEB-INF criar a pasta classes, dentro de classes criar a pasta META-INF
+		q) Dentro de META-INF Criar um arquivo .xml de nome persistence.xml
+		 	Segue a estrutura do persistence.xml
+		 	<?xml version="1.0" encoding="UTF-8"?>
+		 	<!DOCTYPE xml>
+		 	<persistence>
+		 		<persistence-unit name="AgendamentoEmailDS">
+		 				<jta-data-source>java:/AgendamentoEmailDS</jta-data-source>
+		 		</persistence-unit>
+		 	</persistence>
+		 
+		r) Após concluir as configurações, reinicie o servidor wildfly.
+		
+		
+		
+		
