@@ -18,6 +18,11 @@ public class AgendamentoEmail {
 	private String mensagem;
 	private Boolean agendado;
 	
+	
+	
+	public long getId() {
+		return id;
+	}
 	public String getEmail() {
 		return email;
 	}

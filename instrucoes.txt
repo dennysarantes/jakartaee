@@ -61,6 +61,11 @@ CREATE TABLE agendamentoemail (
 		 
 		r) Após concluir as configurações, reinicie o servidor wildfly.
 		
-		
+		s)PARA ALTERAR A URL DO CONTEXTO DA APLICAÇÃO, basta criar o arquivo jboss-web.xml dentro da pasta /webapp/WEB-INF
+				<?xml version="1.0" encoding="UTF-8"?>
+				<!DOCTYPE xml>
+				<jboss-web>
+						<context-root>agendamento</context-root>
+				</jboss-web>
 		
 		
