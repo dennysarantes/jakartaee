@@ -67,5 +67,13 @@ CREATE TABLE agendamentoemail (
 				<jboss-web>
 						<context-root>agendamento</context-root>
 				</jboss-web>
-		
+				
+				
+		t) PARA USAR O ACTIVEMQ do Wildfly
+			a) Startar o servidor
+			b) executar o comando jboss-cli.sh na pasta /bin, depois executar o comando connect
+			c) Para criar a fila no servidor: jms-queue add --queue-address=NomeDaFila --entries=JNDI_DA_FILA
+				 (No caso desse projeto ficou assim:jms-queue add --queue-address=EmailQueue --entries=java:/jms/queue/EmailQueue)
+			d) No caso desse projeto, o producer desta fila está configurado na classe AgenamentoEmailJob
+			e) No caso desse projeto, o consumer desta fila está configurado na classe AgendamentoEmailMDB
 		

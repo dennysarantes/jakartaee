@@ -3,18 +3,25 @@ package br.com.alura.dao;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.transaction.UserTransaction;
 
 import br.com.alura.entidade.AgendamentoEmail;
 
+//@TransactionManagement(TransactionManagementType.BEAN) => Utilizado caso queira fazer o controle de transação no banco
 @Stateless
 public class AgendamentoEmailDAO {
 
 	@PersistenceContext //Anotação para a interface entitymanager
 	private EntityManager entityManager;
 	
+//Se houver necessidade de controlar a transação - não deixar na mão do Servidor de Aplicação
+//	@Inject
+//	private UserTransaction userTransaction;
 	
 	//Com o servidor de aplicação, não é necessário tratar o entitymanager, O JBOSS será o responsável.
 //	public AgendamentoEmailDAO() {
@@ -75,6 +82,16 @@ public class AgendamentoEmailDAO {
 	}
 	
 public void alterarEnviarEmail(AgendamentoEmail agendamentoEmail) {
+
+//********Trecho de código necessário quando quer assumir o controle transacional ************
+//		try {
+//			userTransaction.begin();
+//			entityManager.merge(agendamentoEmail);
+//			userTransaction.commit();
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
+		
 		entityManager.merge(agendamentoEmail);
 	}
 }

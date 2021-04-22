@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import br.com.alura.dao.AgendamentoEmailDAO;
@@ -32,7 +34,7 @@ public class AgendamentoEmailServico {
 		dao.inserir(agendamentoEmail);
 	}
 
-
+	
 	public int alterar(String id, AgendamentoEmail agendamentoEmail) {
 		return dao.alterar(id, agendamentoEmail);
 	}
@@ -52,10 +54,15 @@ public class AgendamentoEmailServico {
 		}
 	}
 
-
+	//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public void alterarEnviarEmail(AgendamentoEmail agendamentoEmail) {
-		agendamentoEmail.setAgendado(true);
-		dao.alterarEnviarEmail(agendamentoEmail);
+		//if(agendamentoEmail.getEmail().equals("dennys.arantes@gmail.com")) {
+			//throw new RuntimeException("Não foi possível fazer a alteração.");
+		//}else {
+			agendamentoEmail.setAgendado(true);
+			dao.alterarEnviarEmail(agendamentoEmail);
+		//}
+		
 		
 	
 	}
